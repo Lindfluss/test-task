@@ -56,7 +56,7 @@ export default async function ISRPage() {
             </section>
 
             <p className="text-xs text-muted-foreground">
-                Метаданные: <code>jsonplaceholder.typicode.com/photos</code>. Изображения: <code>picsum.photos</code>.
+                Метаданные: <code>jsonplaceholder.typicode.com/photos</code>. Изображения: <code>fpoimg.com</code>.
             </p>
         </div>
     );
