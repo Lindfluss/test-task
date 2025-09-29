@@ -10,7 +10,6 @@ async function getPhotos(): Promise<Photo[]> {
         next: { revalidate },
     });
     if (!res.ok) throw new Error("Failed to fetch photos");
-    // Берём только id и title, а картинки даём с picsum
     const data: any[] = await res.json();
     return data.map((p) => ({ id: p.id, title: p.title })) as Photo[];
 }
@@ -26,13 +25,13 @@ export default async function ISRPage() {
             <PageHeader
                 title="ISR страница"
                 subtitle={`Инкрементальная статическая регенерация: кэш обновляется не чаще, чем раз в ${revalidate} секунд. Сгенерировано: ${generatedAt}`}
-                actions={<OpenModalButton />}
+                actions={<OpenModalButton/>}
             />
 
             <section className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {photos.map((p) => {
-                    const thumb = `https://picsum.photos/seed/${p.id}/300/200`;
-                    const full = `https://picsum.photos/seed/${p.id}/1200/800`;
+                    const thumb = `https://fpoimg.com/150x100?text=${encodeURIComponent(p.id.toString())}`;
+                    const full = `https://fpoimg.com/600x400?text=${encodeURIComponent(p.title)}`;
                     return (
                         <a
                             key={p.id}
@@ -41,14 +40,14 @@ export default async function ISRPage() {
                             rel="noreferrer"
                             className="group rounded-lg border p-3 hover:shadow-md transition-shadow"
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={thumb}
                                 alt={p.title}
                                 className="h-28 w-full rounded-md object-cover"
                                 loading="lazy"
                             />
-                            <div className="mt-2 line-clamp-2 text-sm text-muted-foreground group-hover:text-foreground">
+                            <div
+                                className="mt-2 line-clamp-2 text-sm text-muted-foreground group-hover:text-foreground">
                                 {p.title}
                             </div>
                         </a>
