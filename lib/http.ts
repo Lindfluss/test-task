@@ -2,7 +2,8 @@
 type FetchJSONInit = RequestInit & {
     timeoutMs?: number;
     retries?: number;
-    retryDelayMs?: number; // базовая задержка, далее * 2^attempt
+    retryDelayMs?: number;
+    signal?: AbortSignal | null; // было: AbortSignal | undefined
 };
 
 export class HttpError extends Error {
@@ -98,12 +99,9 @@ async function safeText(res: Response) {
     }
 }
 
-function signalAborted(signal?: AbortSignal) {
-    try {
-        return !!signal && signal.aborted;
-    } catch {
-        return false;
-    }
+
+function signalAborted(signal?: AbortSignal | null) {
+    return !!signal?.aborted;
 }
 
 function anySignal(signals: AbortSignal[]) {
